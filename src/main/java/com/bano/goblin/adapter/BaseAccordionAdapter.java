@@ -21,11 +21,17 @@ public abstract class BaseAccordionAdapter<T, E extends ViewDataBinding> extends
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_CATEGORY = 2;
 
+    private final boolean mExpandOnlyOneFlag;
+    private AccordionContainer<T> mPreviousAccordionOpened;
+
     public abstract void onCategoryBindViewHolder(E e, String category);
     public abstract void onItemBindViewHolder(E e, T t);
 
-    public BaseAccordionAdapter(ArrayList<AccordionContainer<T>> items, @LayoutRes int categoryLayoutRes, OnClickListener<AccordionContainer<T>> listener){
+    public BaseAccordionAdapter(ArrayList<AccordionContainer<T>> items,
+                                @LayoutRes int categoryLayoutRes, boolean expandOnlyOne,
+                                OnClickListener<AccordionContainer<T>> listener){
         super(items, categoryLayoutRes, listener);
+        mExpandOnlyOneFlag = expandOnlyOne;
     }
 
     @Override
@@ -37,25 +43,43 @@ public abstract class BaseAccordionAdapter<T, E extends ViewDataBinding> extends
             public void onClicked(AccordionContainer<T> accordionContainer) {
                 if(accordionContainer.type == TYPE_CATEGORY) {
                     if(accordionContainer.isOpen()){
-                        ArrayList<AccordionContainer<T>> accordionContainers = getItems();
-                        accordionContainer.setOpen(false);
-                        for (T t : accordionContainer.tList) {
-                            accordionContainers.remove(new AccordionContainer<>(t, TYPE_ITEM));
-                        }
-                        notifyDataSetChanged();
+                        collapse(accordionContainer);
                     }
                     else {
-                        accordionContainer.setOpen(true);
-                        int position = accordionContainer.position + 1;
-                        for (T t : accordionContainer.tList) {
-                            addItem(position, new AccordionContainer<>(t, TYPE_ITEM));
-                            ++position;
+                        if(mExpandOnlyOneFlag && mPreviousAccordionOpened != null){
+                            collapse(mPreviousAccordionOpened);
                         }
+                        expand(accordionContainer);
                     }
                 }
                 else getListener().onClicked(accordionContainer);
             }
         });
+    }
+
+    private void expand(AccordionContainer<T> accordionContainer){
+        mPreviousAccordionOpened = accordionContainer;
+        accordionContainer.setOpen(true);
+        int position = accordionContainer.position + 1;
+        for (T t : accordionContainer.tList) {
+            addItem(position, new AccordionContainer<>(t, TYPE_ITEM));
+            ++position;
+        }
+
+        for(int i = position; i < getItems().size(); i++){
+            getItems().get(i).setPosition(i);
+        }
+    }
+
+    private void collapse(AccordionContainer<T> accordionContainer){
+        accordionContainer.setOpen(false);
+        for (T t : accordionContainer.tList) {
+            remove(new AccordionContainer<>(t, TYPE_ITEM));
+        }
+
+        for(int i = accordionContainer.position + 1; i < getItems().size(); i++){
+            getItems().get(i).setPosition(i);
+        }
     }
 
     @Override
