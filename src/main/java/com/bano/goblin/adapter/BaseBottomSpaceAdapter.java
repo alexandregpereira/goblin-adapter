@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,7 +19,7 @@ public abstract class BaseBottomSpaceAdapter<T, E extends ViewDataBinding> exten
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_BOTTOM = 2;
 
-    public BaseBottomSpaceAdapter(Context context, ArrayList<T> items, int layoutRes, OnClickListener<T> listener){
+    public BaseBottomSpaceAdapter(Context context, List<T> items, int layoutRes, OnClickListener<T> listener){
         super(context, items, layoutRes, listener);
     }
 

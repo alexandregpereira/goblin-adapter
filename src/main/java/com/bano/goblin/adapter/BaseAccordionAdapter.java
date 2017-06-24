@@ -6,7 +6,7 @@ import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,7 +20,7 @@ public abstract class BaseAccordionAdapter<T, E extends ViewDataBinding> extends
     public abstract void onCategoryBindViewHolder(E e, String category);
     public abstract void onItemBindViewHolder(E e, T t);
 
-    public BaseAccordionAdapter(ArrayList<AccordionContainer<T>> items,
+    public BaseAccordionAdapter(List<AccordionContainer<T>> items,
                                 @LayoutRes int categoryLayoutRes, boolean expandOnlyOne,
                                 OnClickListener<AccordionContainer<T>> listener){
         super(items, categoryLayoutRes, listener);
