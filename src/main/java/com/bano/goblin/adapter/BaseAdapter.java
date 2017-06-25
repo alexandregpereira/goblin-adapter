@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
     private final int mLayoutRes;
     private final OnClickListener<T> mListener;
     private final Resources mResources;
-    private ArrayList<T> mItems;
+    private List<T> mItems;
 
     protected abstract void onBindViewHolder(E e, T t);
 
@@ -30,14 +29,14 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
         void onClicked(T t);
     }
 
-    public BaseAdapter(ArrayList<T> items, int layoutRes, OnClickListener<T> listener){
+    public BaseAdapter(List<T> items, int layoutRes, OnClickListener<T> listener){
         mLayoutRes = layoutRes;
         mItems = items;
         mListener = listener;
         mResources = null;
     }
 
-    public BaseAdapter(Context context, ArrayList<T> items, int layoutRes, OnClickListener<T> listener){
+    public BaseAdapter(Context context, List<T> items, int layoutRes, OnClickListener<T> listener){
         mLayoutRes = layoutRes;
         mItems = items;
         mListener = listener;
@@ -94,7 +93,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
         notifyItemRemoved(i);
     }
 
-    public void setItems(ArrayList<T> items) {
+    public void setItems(List<T> items) {
         this.mItems = items;
         notifyDataSetChanged();
     }
@@ -116,7 +115,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
         notifyItemInserted(position);
     }
 
-    public ArrayList<T> getItems(){
+    public List<T> getItems(){
         return mItems;
     }
 
