@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * This class is used on BaseAccordionAdapter class
  */
-
+@Deprecated
 public class AccordionContainer<T> {
 
     public static final int TYPE_ITEM = 1;
