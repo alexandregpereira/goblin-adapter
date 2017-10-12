@@ -131,10 +131,10 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
         return mListener;
     }
 
-    static class ViewHolder<T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
+    public static class ViewHolder<T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
         public final E binding;
 
-        ViewHolder(E binding, final OnClickListener<T> listener){
+        public ViewHolder(E binding, final OnClickListener<T> listener){
             super(binding.getRoot());
             this.binding = binding;
             if(listener != null) {

@@ -11,7 +11,10 @@ import java.util.List;
 /**
  *
  * Provides a accordion implementation
+ *
+ * uses BaseSectionAdapter instead
  */
+@Deprecated
 public abstract class BaseAccordionAdapter<T, E extends ViewDataBinding> extends BaseAdapter<AccordionContainer<T>, E>{
 
     private final boolean mExpandOnlyOneFlag;

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 /**
  * This class is used on BaseAccordionAdapter class
  */
-
+@Deprecated
 public class AccordionContainer<T> {
 
-    static final int TYPE_ITEM = 1;
-    static final int TYPE_CATEGORY = 2;
+    public static final int TYPE_ITEM = 1;
+    public static final int TYPE_CATEGORY = 2;
 
-    final String category;
+    public final String category;
     public final T t;
-    final ArrayList<T> tList;
+    public final ArrayList<T> tList;
     public final int type;
     private int position;
     private boolean open;
@@ -23,6 +23,14 @@ public class AccordionContainer<T> {
         this.type = TYPE_CATEGORY;
         this.category = category;
         this.t = null;
+    }
+
+    public AccordionContainer(String category, ArrayList<T> tList, int position) {
+        this.tList = tList;
+        this.type = TYPE_CATEGORY;
+        this.category = category;
+        this.t = null;
+        this.position = position;
     }
 
     public AccordionContainer(T t) {
@@ -40,11 +48,11 @@ public class AccordionContainer<T> {
         this.position = position;
     }
 
-    boolean isOpen() {
+    public boolean isOpen() {
         return open;
     }
 
-    void setOpen(boolean open) {
+    public void setOpen(boolean open) {
         this.open = open;
     }
 
