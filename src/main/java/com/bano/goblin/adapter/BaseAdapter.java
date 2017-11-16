@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
     private final int mLayoutRes;
     private final OnClickListener<T> mListener;
     private final Resources mResources;
+    @NonNull
     private List<T> mItems;
 
     protected abstract void onBindViewHolder(E e, T t);
@@ -29,14 +31,14 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
         void onClicked(T t);
     }
 
-    public BaseAdapter(List<T> items, int layoutRes, OnClickListener<T> listener){
+    public BaseAdapter(@NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
         mLayoutRes = layoutRes;
         mItems = items;
         mListener = listener;
         mResources = null;
     }
 
-    public BaseAdapter(Context context, List<T> items, int layoutRes, OnClickListener<T> listener){
+    public BaseAdapter(Context context, @NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
         mLayoutRes = layoutRes;
         mItems = items;
         mListener = listener;
@@ -75,7 +77,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
 
     @Override
     public int getItemCount() {
-        return mItems == null ? 0 : mItems.size();
+        return mItems.size();
     }
 
     public void replace(T t) {
@@ -93,9 +95,10 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
         notifyItemRemoved(i);
     }
 
-    public void setItems(List<T> items) {
-        this.mItems = items;
-        notifyDataSetChanged();
+    public void setItems(@NonNull List<T> items) {
+        for (T item : items) {
+            setItem(item);
+        }
     }
 
     public void setItem(T t) {
