@@ -17,32 +17,14 @@ import java.util.List;
  * A base Recycler View adapter that uses DataBinding
  */
 
-public abstract class BaseAdapter<T, E extends ViewDataBinding> extends RecyclerView.Adapter<BaseAdapter.ViewHolder<T, E>>{
-
-    private final int mLayoutRes;
-    private final OnClickListener<T> mListener;
-    private final Resources mResources;
-    @NonNull
-    private List<T> mItems;
-
-    protected abstract void onBindViewHolder(E e, T t);
-
-    public interface OnClickListener<T>{
-        void onClicked(T t);
-    }
+public abstract class BaseAdapter<T, E extends ViewDataBinding> extends DefaultAdapter<T, E, BaseAdapter.ViewHolder<T, E>>{
 
     public BaseAdapter(@NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
-        mLayoutRes = layoutRes;
-        mItems = items;
-        mListener = listener;
-        mResources = null;
+        super(items, layoutRes, listener);
     }
 
     public BaseAdapter(Context context, @NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
-        mLayoutRes = layoutRes;
-        mItems = items;
-        mListener = listener;
-        mResources = context.getResources();
+        super(context, items, layoutRes, listener);
     }
 
     @Override
@@ -73,65 +55,6 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
             // so calling super will call that method with 2 arguments.
             super.onBindViewHolder(holder,position,payloads);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mItems.size();
-    }
-
-    public void replace(T t) {
-        int i = mItems.indexOf(t);
-        if(i >= 0){
-            mItems.set(i, t);
-            notifyItemChanged(i, t);
-        }
-    }
-
-    public void remove(T t) {
-        int i = mItems.indexOf(t);
-        if(i < 0) return;
-        mItems.remove(i);
-        notifyItemRemoved(i);
-    }
-
-    public void setItems(@NonNull List<T> items) {
-        for (T item : items) {
-            setItem(item);
-        }
-    }
-
-    public void setItem(T t) {
-        int i = mItems.indexOf(t);
-        if(i >= 0){
-            mItems.set(i, t);
-            notifyItemChanged(i, t);
-        }
-        else {
-            this.mItems.add(t);
-            notifyItemInserted(mItems.size() - 1);
-        }
-    }
-
-    public void addItem(int position, T t) {
-        this.mItems.add(position, t);
-        notifyItemInserted(position);
-    }
-
-    public List<T> getItems(){
-        return mItems;
-    }
-
-    public Resources getResources(){
-        return mResources;
-    }
-
-    int getLayoutRes(){
-        return mLayoutRes;
-    }
-
-    protected OnClickListener<T> getListener(){
-        return mListener;
     }
 
     public static class ViewHolder<T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
