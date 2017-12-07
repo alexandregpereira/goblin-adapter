@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,18 +26,17 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
     private final int mHeaderLayoutRes;
 
     protected abstract void onBindHeader(V headerBinding, K headerObj);
-    protected T createFakeObj() { return null; }
 
     public HeaderAdapter(@NonNull Context context, @NonNull K headerObj, int headerLayoutRes, @NonNull List<T> items, int layoutRes, OnClickListener<T> listener) {
-        super(context, items, layoutRes, listener);
-        getItems().add(0, createFakeObj());
+        super(context, new ArrayList<>(items), layoutRes, listener);
+        mItems.add(0, null);
         mHeaderObj = headerObj;
         mHeaderLayoutRes = headerLayoutRes;
     }
 
     public HeaderAdapter(@NonNull K headerObj, int headerLayoutRes, @NonNull List<T> items, int layoutRes, OnClickListener<T> listener) {
-        super(items, layoutRes, listener);
-        getItems().add(0, createFakeObj());
+        super(new ArrayList<>(items), layoutRes, listener);
+        mItems.add(0, null);
         mHeaderObj = headerObj;
         mHeaderLayoutRes = headerLayoutRes;
     }
@@ -92,8 +92,12 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
     }
 
     @Override
-    public int getItemCount() {
-        return getItems().size();
+    public List<T> getItems() {
+        List<T> items = new ArrayList<>(super.getItems());
+        if(items.size() > 0) {
+            items.remove(0);
+        }
+        return items;
     }
 
     public static class ViewHolder<V extends ViewDataBinding, T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
