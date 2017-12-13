@@ -17,6 +17,7 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     protected final int mLayoutRes;
     protected final OnClickListener<T> mListener;
+    private OnBottomItemListener mOnBottomItemListener;
     protected final Resources mResources;
     @NonNull
     protected final List<T> mItems;
@@ -25,6 +26,10 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     public interface OnClickListener<T>{
         void onClicked(T t);
+    }
+
+    public interface OnBottomItemListener{
+        void onBottom();
     }
 
     public DefaultAdapter(@NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
@@ -98,5 +103,21 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     protected OnClickListener<T> getListener(){
         return mListener;
+    }
+
+    public void setOnBottomItemListener(OnBottomItemListener onBottomItemListener) {
+        mOnBottomItemListener = onBottomItemListener;
+    }
+
+    private boolean isPositionBottom(int position) {
+        return getItems().size() - 2 == position + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(isPositionBottom(position) && mOnBottomItemListener != null) {
+            mOnBottomItemListener.onBottom();
+        }
+        return super.getItemViewType(position);
     }
 }

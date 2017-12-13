@@ -22,7 +22,7 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_ITEM = 2;
 
-    private final K mHeaderObj;
+    private K mHeaderObj;
     private final int mHeaderLayoutRes;
 
     protected abstract void onBindHeader(V headerBinding, K headerObj);
@@ -85,6 +85,7 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
 
     @Override
     public int getItemViewType(int position) {
+        super.getItemViewType(position);
         if (position == 0)
             return TYPE_HEADER;
 
@@ -98,6 +99,11 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
             items.remove(0);
         }
         return items;
+    }
+
+    public void setHeader(K headerObj) {
+        mHeaderObj = headerObj;
+        notifyItemChanged(0);
     }
 
     public static class ViewHolder<V extends ViewDataBinding, T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
