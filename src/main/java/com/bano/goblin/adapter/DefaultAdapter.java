@@ -3,6 +3,7 @@ package com.bano.goblin.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.ViewDataBinding;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
     protected final int mLayoutRes;
     protected final OnClickListener<T> mListener;
     private OnBottomItemListener mOnBottomItemListener;
+    private Handler mHandler;
     protected final Resources mResources;
     @NonNull
     protected final List<T> mItems;
@@ -48,8 +50,14 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     @Override
     public void onBindViewHolder(V holder, int position) {
-        if(isPositionBottom(position) && mOnBottomItemListener != null) {
-            mOnBottomItemListener.onBottom();
+        if(isPositionBottom(position) && mOnBottomItemListener != null && mHandler != null) {
+            final OnBottomItemListener onBottomItemListener = mOnBottomItemListener;
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onBottomItemListener.onBottom();
+                }
+            });
         }
     }
 
@@ -112,7 +120,8 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
         return mListener;
     }
 
-    public void setOnBottomItemListener(OnBottomItemListener onBottomItemListener) {
+    public void setOnBottomItemListener(Handler handler, OnBottomItemListener onBottomItemListener) {
+        mHandler = handler;
         mOnBottomItemListener = onBottomItemListener;
     }
 
