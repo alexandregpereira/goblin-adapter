@@ -36,6 +36,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends DefaultA
 
     @Override
     public void onBindViewHolder(ViewHolder<T, E> holder, int position) {
+        super.onBindViewHolder(holder, position);
         T t = mItems.get(position);
         holder.binding.getRoot().setTag(t);
         this.onBindViewHolder(holder.binding, t);

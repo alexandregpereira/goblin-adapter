@@ -47,6 +47,13 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
     }
 
     @Override
+    public void onBindViewHolder(V holder, int position) {
+        if(isPositionBottom(position) && mOnBottomItemListener != null) {
+            mOnBottomItemListener.onBottom();
+        }
+    }
+
+    @Override
     public int getItemCount() {
         return mItems.size();
     }
@@ -111,13 +118,5 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     private boolean isPositionBottom(int position) {
         return getItems().size() - 2 == position + 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if(isPositionBottom(position) && mOnBottomItemListener != null) {
-            mOnBottomItemListener.onBottom();
-        }
-        return super.getItemViewType(position);
     }
 }

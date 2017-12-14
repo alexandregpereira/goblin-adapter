@@ -57,6 +57,7 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
 
     @Override
     public void onBindViewHolder(ViewHolder<V, T, E> holder, int position) {
+        super.onBindViewHolder(holder, position);
         if(getItemViewType(position) == TYPE_ITEM) {
             T t = mItems.get(position);
             holder.binding.getRoot().setTag(t);
@@ -85,7 +86,6 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
 
     @Override
     public int getItemViewType(int position) {
-        super.getItemViewType(position);
         if (position == 0)
             return TYPE_HEADER;
 

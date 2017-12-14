@@ -45,7 +45,6 @@ public abstract class BaseBottomSpaceAdapter<T, E extends ViewDataBinding> exten
 
     @Override
     public int getItemViewType(int position) {
-        super.getItemViewType(position);
         if (isPositionBottom(position))
             return TYPE_BOTTOM;
 

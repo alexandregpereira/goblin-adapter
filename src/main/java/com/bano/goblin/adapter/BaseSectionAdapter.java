@@ -104,7 +104,6 @@ abstract public class BaseSectionAdapter<T> extends BaseAdapter<SectionContainer
 
     @Override
     public int getItemViewType(int position) {
-        super.getItemViewType(position);
         SectionContainer<T> section = getItems().get(position);
         Object item = section.item;
         if(item != null) {
