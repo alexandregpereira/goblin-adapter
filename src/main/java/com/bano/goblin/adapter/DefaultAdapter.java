@@ -23,6 +23,7 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
     protected final Resources mResources;
     @NonNull
     protected final List<T> mItems;
+    private int lastBottomPosition;
 
     protected abstract void onBindViewHolder(E e, T t);
 
@@ -50,7 +51,8 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     @Override
     public void onBindViewHolder(V holder, int position) {
-        if(isPositionBottom(position) && mOnBottomItemListener != null && mHandler != null) {
+        if(lastBottomPosition != position && isPositionBottom(position) && mOnBottomItemListener != null && mHandler != null) {
+            lastBottomPosition = position;
             final OnBottomItemListener onBottomItemListener = mOnBottomItemListener;
             mHandler.post(new Runnable() {
                 @Override
