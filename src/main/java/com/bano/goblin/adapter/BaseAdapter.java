@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,31 +17,14 @@ import java.util.List;
  * A base Recycler View adapter that uses DataBinding
  */
 
-public abstract class BaseAdapter<T, E extends ViewDataBinding> extends RecyclerView.Adapter<BaseAdapter.ViewHolder<T, E>>{
+public abstract class BaseAdapter<T, E extends ViewDataBinding> extends DefaultAdapter<T, E, BaseAdapter.ViewHolder<T, E>>{
 
-    private final int mLayoutRes;
-    private final OnClickListener<T> mListener;
-    private final Resources mResources;
-    private List<T> mItems;
-
-    protected abstract void onBindViewHolder(E e, T t);
-
-    public interface OnClickListener<T>{
-        void onClicked(T t);
+    public BaseAdapter(@NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
+        super(items, layoutRes, listener);
     }
 
-    public BaseAdapter(List<T> items, int layoutRes, OnClickListener<T> listener){
-        mLayoutRes = layoutRes;
-        mItems = items;
-        mListener = listener;
-        mResources = null;
-    }
-
-    public BaseAdapter(Context context, List<T> items, int layoutRes, OnClickListener<T> listener){
-        mLayoutRes = layoutRes;
-        mItems = items;
-        mListener = listener;
-        mResources = context.getResources();
+    public BaseAdapter(Context context, @NonNull List<T> items, int layoutRes, OnClickListener<T> listener){
+        super(context, items, layoutRes, listener);
     }
 
     @Override
@@ -52,6 +36,7 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
 
     @Override
     public void onBindViewHolder(ViewHolder<T, E> holder, int position) {
+        super.onBindViewHolder(holder, position);
         T t = mItems.get(position);
         holder.binding.getRoot().setTag(t);
         this.onBindViewHolder(holder.binding, t);
@@ -71,64 +56,6 @@ public abstract class BaseAdapter<T, E extends ViewDataBinding> extends Recycler
             // so calling super will call that method with 2 arguments.
             super.onBindViewHolder(holder,position,payloads);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mItems == null ? 0 : mItems.size();
-    }
-
-    public void replace(T t) {
-        int i = mItems.indexOf(t);
-        if(i >= 0){
-            mItems.set(i, t);
-            notifyItemChanged(i, t);
-        }
-    }
-
-    public void remove(T t) {
-        int i = mItems.indexOf(t);
-        if(i < 0) return;
-        mItems.remove(i);
-        notifyItemRemoved(i);
-    }
-
-    public void setItems(List<T> items) {
-        this.mItems = items;
-        notifyDataSetChanged();
-    }
-
-    public void setItem(T t) {
-        int i = mItems.indexOf(t);
-        if(i >= 0){
-            mItems.set(i, t);
-            notifyItemChanged(i, t);
-        }
-        else {
-            this.mItems.add(t);
-            notifyItemInserted(mItems.size() - 1);
-        }
-    }
-
-    public void addItem(int position, T t) {
-        this.mItems.add(position, t);
-        notifyItemInserted(position);
-    }
-
-    public List<T> getItems(){
-        return mItems;
-    }
-
-    public Resources getResources(){
-        return mResources;
-    }
-
-    int getLayoutRes(){
-        return mLayoutRes;
-    }
-
-    protected OnClickListener<T> getListener(){
-        return mListener;
     }
 
     public static class ViewHolder<T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
