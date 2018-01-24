@@ -4,7 +4,7 @@ import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used on BaseAccordionAdapter class
@@ -21,20 +21,20 @@ public class SectionContainer<T> {
 
     public final T category;
     public final Object item;
-    public final ArrayList<Object> itemList;
+    public final List<Object> itemList;
     @ViewTypeFlags
     public final int type;
     private int position;
     private boolean open;
 
-    public SectionContainer(T category, ArrayList<Object> itemList) {
+    public SectionContainer(T category, List<Object> itemList) {
         this.itemList = itemList;
         this.type = TYPE_CATEGORY;
         this.category = category;
         this.item = null;
     }
 
-    public SectionContainer(T category, ArrayList<Object> itemList, int position) {
+    public SectionContainer(T category, List<Object> itemList, int position) {
         this.itemList = itemList;
         this.type = TYPE_CATEGORY;
         this.category = category;
@@ -78,13 +78,15 @@ public class SectionContainer<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SectionContainer that = (SectionContainer) o;
+        SectionContainer<?> that = (SectionContainer<?>) o;
 
-        return item != null ? item.equals(that.item) : that.item == null;
+        return category != null ? category.equals(that.category) : that.category == null && (item != null ? item.equals(that.item) : that.item == null);
     }
 
     @Override
     public int hashCode() {
-        return item != null ? item.hashCode() : 0;
+        int result = category != null ? category.hashCode() : 0;
+        result = 31 * result + (item != null ? item.hashCode() : 0);
+        return result;
     }
 }

@@ -114,7 +114,7 @@ abstract public class BaseSectionAdapter<T> extends BaseAdapter<SectionContainer
         else return 11;
     }
 
-    private boolean isExpandable() {
+    public boolean isExpandable() {
         return mExpandFlag == EXPAND_MANY || mExpandFlag == EXPAND_ONLY_ONE;
     }
 }
