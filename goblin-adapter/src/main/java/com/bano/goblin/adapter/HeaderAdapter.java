@@ -103,7 +103,15 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
 
     public void setHeader(K headerObj) {
         mHeaderObj = headerObj;
+        notifyHeaderChanges();
+    }
+    
+    public void notifyHeaderChanges() {
         notifyItemChanged(0);
+    }
+    
+    public K getHeader() {
+        return mHeaderObj;
     }
 
     public static class ViewHolder<V extends ViewDataBinding, T, E extends ViewDataBinding> extends RecyclerView.ViewHolder{
