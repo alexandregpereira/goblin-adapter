@@ -84,9 +84,7 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
     }
 
     public void setItems(@NonNull List<T> items) {
-        for (T item : items) {
-            setItem(item);
-        }
+        setItemsInRange(0, getItems().size(), items);
     }
 
     public void setItem(T t) {
@@ -98,6 +96,48 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
         else {
             this.mItems.add(t);
             notifyItemInserted(mItems.size() - 1);
+        }
+    }
+
+    public void setItemsInRange(int startIndex, int toIndex, @NonNull List<T> items) {
+        int index = startIndex;
+        for (T item : items) {
+            setItemAtIndex(index++, item);
+        }
+
+        List<T> allItems = getItems();
+
+        int toIndexReal = startIndex + (allItems.size() - startIndex < toIndex ? allItems.size() - startIndex : toIndex);
+        if(toIndexReal <= startIndex) return;
+        List<T> itemsInRange = allItems.subList(startIndex, toIndexReal);
+        if(items.size() < itemsInRange.size()) {
+            for (T item : itemsInRange) {
+                int i = items.indexOf(item);
+                if(i < 0) {
+                    remove(item);
+                }
+            }
+        }
+    }
+
+    public void setItemAtIndex(int index, @NonNull T t) {
+        int i = mItems.indexOf(t);
+        if(i >= 0){
+            if(i != index) {
+                mItems.remove(i);
+                notifyItemRemoved(i);
+                int indexReal = index > mItems.size() ? mItems.size() : index;
+                mItems.add(indexReal, t);
+                notifyItemInserted(indexReal);
+                return;
+            }
+            mItems.set(i, t);
+            notifyItemChanged(i, t);
+        }
+        else {
+            int indexReal = index > mItems.size() ? mItems.size() : index;
+            this.mItems.add(indexReal, t);
+            notifyItemInserted(indexReal);
         }
     }
 

@@ -109,7 +109,12 @@ public abstract class HeaderAdapter<K, V extends ViewDataBinding, T, E extends V
     public void notifyHeaderChanges() {
         notifyItemChanged(0);
     }
-    
+
+    @Override
+    public void setItemAtIndex(int index, @NonNull T t) {
+        super.setItemAtIndex(index + 1, t);
+    }
+
     public K getHeader() {
         return mHeaderObj;
     }
