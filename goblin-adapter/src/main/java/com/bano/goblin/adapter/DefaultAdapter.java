@@ -23,7 +23,8 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
     protected final Resources mResources;
     @NonNull
     protected final List<T> mItems;
-    private int lastBottomPosition;
+    private int lastPageBottomPosition;
+    private int pageSize;
 
     protected abstract void onBindViewHolder(E e, T t);
 
@@ -51,8 +52,8 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
     @Override
     public void onBindViewHolder(V holder, int position) {
-        if(lastBottomPosition != position && isPositionBottom(position) && mOnBottomItemListener != null && mHandler != null) {
-            lastBottomPosition = position;
+        if(position > lastPageBottomPosition && isPagePositionBottom(position) && mOnBottomItemListener != null && mHandler != null) {
+            lastPageBottomPosition = position;
             final OnBottomItemListener onBottomItemListener = mOnBottomItemListener;
             mHandler.post(new Runnable() {
                 @Override
@@ -162,12 +163,19 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
         return mListener;
     }
 
-    public void setOnBottomItemListener(Handler handler, OnBottomItemListener onBottomItemListener) {
+    public void setOnBottomItemListener(int pageSize, Handler handler, OnBottomItemListener onBottomItemListener) {
+        this.pageSize = pageSize;
         mHandler = handler;
         mOnBottomItemListener = onBottomItemListener;
     }
 
-    private boolean isPositionBottom(int position) {
-        return getItems().size() - 2 == position + 1;
+    public void clearLastPageBottomPosition() {
+        lastPageBottomPosition = 0;
+    }
+
+    private boolean isPagePositionBottom(int position) {
+        if(pageSize == 0) return false;
+        int currentPosition = position + 1;
+        return currentPosition % (pageSize - 2) == 0;
     }
 }
