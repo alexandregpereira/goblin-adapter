@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -111,12 +112,17 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
         int toIndexReal = startIndex + (allItems.size() - startIndex < toIndex ? allItems.size() - startIndex : toIndex);
         if(toIndexReal <= startIndex) return;
         List<T> itemsInRange = allItems.subList(startIndex, toIndexReal);
+        List<T> itemsToRemove = new ArrayList<>();
         if(items.size() < itemsInRange.size()) {
             for (T item : itemsInRange) {
                 int i = items.indexOf(item);
                 if(i < 0) {
-                    remove(item);
+                    itemsToRemove.add(item);
                 }
+            }
+
+            for(T itemToRemove : itemsToRemove) {
+                remove(itemToRemove);
             }
         }
     }
