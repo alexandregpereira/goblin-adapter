@@ -109,7 +109,11 @@ public abstract class DefaultAdapter<T, E extends ViewDataBinding, V extends Rec
 
         List<T> allItems = getItems();
 
-        int toIndexReal = startIndex + (allItems.size() - startIndex < toIndex ? allItems.size() - startIndex : toIndex);
+        int toIndexReal;
+        if(allItems.size() - startIndex < toIndex) {
+            toIndexReal = startIndex + allItems.size() - startIndex;
+        }
+        else toIndexReal = allItems.size();
         if(toIndexReal <= startIndex) return;
         List<T> itemsInRange = allItems.subList(startIndex, toIndexReal);
         List<T> itemsToRemove = new ArrayList<>();
