@@ -80,6 +80,7 @@ abstract public class BaseSectionAdapter<T> extends BaseAdapter<SectionContainer
     private void expand(SectionContainer<T> sectionContainer) {
         mPreviousAccordionOpened = sectionContainer;
         sectionContainer.setOpen(true);
+        replace(sectionContainer);
         int position = sectionContainer.getPosition() + 1;
         for (Object item : sectionContainer.itemList) {
             addItem(position, new SectionContainer<T>(item));
@@ -93,6 +94,7 @@ abstract public class BaseSectionAdapter<T> extends BaseAdapter<SectionContainer
 
     private void collapse(SectionContainer<T> sectionContainer){
         sectionContainer.setOpen(false);
+        replace(sectionContainer);
         for (Object item : sectionContainer.itemList) {
             remove(new SectionContainer<T>(item));
         }
