@@ -1,1 +1,1 @@
-include ':goblin-adapter'
+include ':goblin-adapter', ':sample'
